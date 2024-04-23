@@ -3,32 +3,31 @@
 set -e
 MSYS2_PATH="C:/msys64"
 export PATH="$MSYS2_PATH/usr/bin:$MSYS2_PATH/mingw64/bin:$MSYS2_PATH/mingw32/bin:$PATH"
-gcc
 
-# ROOT_DIR="$(pwd)"
-# DEPENDENCIES_DIR="$ROOT_DIR/dependencies"
-# ARTIFACTS_DIR="$ROOT_DIR/artifacts-linux"
-# FFMPEG_DIR="$ROOT_DIR/ffmpeg"
-# LOG_DIR="$ARTIFACTS_DIR/logs"
-# PATH="$ARTIFACTS_DIR/bin:$PATH"
-# PKG_CONFIG_PATH="$ARTIFACTS_DIR/lib/pkgconfig"
+ROOT_DIR="$(pwd)"
+DEPENDENCIES_DIR="$ROOT_DIR/dependencies"
+ARTIFACTS_DIR="$ROOT_DIR/artifacts-linux"
+FFMPEG_DIR="$ROOT_DIR/ffmpeg"
+LOG_DIR="$ARTIFACTS_DIR/logs"
+PATH="$ARTIFACTS_DIR/bin:$PATH"
+PKG_CONFIG_PATH="$ARTIFACTS_DIR/lib/pkgconfig"
 
-# log() {
-#     echo " "
-#     echo "#########################################"
-#     echo "### $1"
-#     echo "#########################################"
-#     echo " "
-# }
+log() {
+    echo " "
+    echo "#########################################"
+    echo "### $1"
+    echo "#########################################"
+    echo " "
+}
 
-# create_directory() {
-#     local dir=$1
+create_directory() {
+    local dir=$1
     
-#     # Check if directory exists
-#     if [ ! -d "$dir" ]; then
-#         mkdir -p "$dir"
-#     fi
-# }
+    # Check if directory exists
+    if [ ! -d "$dir" ]; then
+        mkdir -p "$dir"
+    fi
+}
 
 # check_static() {
 #     local lib_path=$1
@@ -45,31 +44,29 @@ gcc
 #     fi
 # }
 
-# build_nasm() {
-#     log "Building NASM"
-#     cd "$DEPENDENCIES_DIR"
-#     export LDFLAGS="-static"
-#     export LIBS="-lc_static"
+build_nasm() {
+    log "Building NASM"
+    cd "$DEPENDENCIES_DIR"
+    export LDFLAGS="-static"
+    export LIBS="-lc_static"
     
-#     if [ -d "nasm-2.16.01" ]; then
-#         echo "Directory already exists. Cleaning and reconfiguring..."
-#         cd nasm-2.16.01
-#         make clean
-#     else
-#         echo "Downloading and extracting tar file..."
-#         wget https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.bz2
-#         tar xjvf nasm-2.16.01.tar.bz2
-#         cd nasm-2.16.01
-#         ./autogen.sh
-#     fi
+    if [ -d "nasm-2.16.01" ]; then
+        echo "Directory already exists. Cleaning and reconfiguring..."
+        cd nasm-2.16.01
+        make clean
+    else
+        echo "Downloading and extracting tar file..."
+        wget https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.bz2
+        tar xjvf nasm-2.16.01.tar.bz2
+        cd nasm-2.16.01
+        ./autogen.sh
+    fi
     
     
-#     ./configure --prefix="$ARTIFACTS_DIR" --bindir="$ARTIFACTS_DIR/bin" && \
-#     make -j$(nproc)
-#     make install
-    
-#     check_static "$ARTIFACTS_DIR/bin/nasm"
-# }
+    ./configure --prefix="$ARTIFACTS_DIR" --bindir="$ARTIFACTS_DIR/bin" && \
+    make -j$(nproc)
+    make install
+}
 
 # build_libdrm() {
 #     log "Building libdrm"
@@ -362,10 +359,10 @@ gcc
 # x11proto-video-dev \
 
 # # Create directories
-# create_directory "$DEPENDENCIES_DIR"
-# create_directory "$ARTIFACTS_DIR"
-# create_directory "$LOG_DIR"
-# # build_nasm 2>&1 | tee "$LOG_DIR/nasm-build.log"
+create_directory "$DEPENDENCIES_DIR"
+create_directory "$ARTIFACTS_DIR"
+create_directory "$LOG_DIR"
+build_nasm 2>&1 | tee "$LOG_DIR/nasm-build.log"
 # build_libdrm 2>&1 | tee "$LOG_DIR/libdrm-build.log"
 # build_libasound 2>&1 | tee "$LOG_DIR/libsound-build.log"
 # build_libxv 2>&1 | tee "$LOG_DIR/libxv-build.log"
